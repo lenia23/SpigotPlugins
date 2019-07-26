@@ -1,0 +1,8 @@
+  name: TutorialPlugin
+  main: jp.lenia23.tutorialplugin.TutorialPlugin
+  version: 1.0
+
+  commands:
+    example:
+      description: Your description
+      usage: /example

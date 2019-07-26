@@ -1,0 +1,3 @@
+  name: TutorialPlugin
+  main: jp.lenia23.tutorialplugin.TutorialPlugin
+  version: 1.0

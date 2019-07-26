@@ -1,0 +1,14 @@
+  name: TeleportExtensionPlugin
+  main: jp.lenia23.tpextension.tpExtension
+  version: 1.0.0
+
+  commands:
+    tpe:
+      description: This command extends /tp command. You can use teleportation with your label instead of the coordinates.
+      usage: |
+        /<command> "[tp <label> | add <label> <x> <y> <z> | update <label> <x> <y> <z> | remove <label> | list]"
+        /<command> tp <label> - teleport to the registerd label coordinates
+        /<command> add <label> <x> <y> <z> - register the label with coordinates
+        /<command> update <label> <x> <y> <z> - update coordinates of the label
+        /<command> remove <label> - remove the label
+        /<command> list - show all labels

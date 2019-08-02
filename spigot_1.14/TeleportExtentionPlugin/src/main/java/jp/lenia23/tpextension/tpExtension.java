@@ -10,10 +10,11 @@ public class tpExtension extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.getCommand("tpe").setExecutor(new tpExtensionCommand(this));
-
         this.saveDefaultConfig();
         config = getConfig();
+        tpExtensionCommand tpe = new tpExtensionCommand(this);
+        this.getCommand("tpe").setExecutor(tpe);
+        this.getCommand("tpe").setTabCompleter(tpe);
         getLogger().info("TpExtensionPlugin is loaded!");
     }
 

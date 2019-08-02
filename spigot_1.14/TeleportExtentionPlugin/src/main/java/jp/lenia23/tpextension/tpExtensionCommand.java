@@ -1,15 +1,23 @@
 package jp.lenia23.tpextension;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-public class tpExtensionCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+public class tpExtensionCommand implements TabExecutor {
     private final tpExtension plugin;
+    private final List<String> subCommandList = new ArrayList<String>(Arrays.asList("add", "list", "remove", "tp", "update"));
+    private Set<String> tpLabelList;
 
     public tpExtensionCommand(tpExtension ref) {
         plugin = ref;
+        tpLabelList = plugin.getListLabels();
     }
 
     // This method is called, when somebody uses our command
@@ -51,7 +59,7 @@ public class tpExtensionCommand implements CommandExecutor {
                     } else {
                         plugin.addLabel(tplabel, x, y, z);
                         player.sendRawMessage(tplabel+ ": [x: " + x + ", y: " + y + ", z: " + z + "] is added");
-
+                        tpLabelList = plugin.getListLabels();
                         return true;
                     }
 
@@ -73,9 +81,10 @@ public class tpExtensionCommand implements CommandExecutor {
                     String tplabel = args[1];
                     plugin.removeLabel(tplabel);
                     player.sendRawMessage(tplabel + " is removed");
+                    tpLabelList = plugin.getListLabels();
                     return true;
                 } else if (subCommand.equalsIgnoreCase("list") && arg_len == 1 ) {
-                    player.sendRawMessage("Registered tplabel: ");
+                    player.sendRawMessage("Registered tp labels: ");
                     for (String l : plugin.getListLabels()) {
                         String x = plugin.getLabelVal(l, "x");
                         String y = plugin.getLabelVal(l, "y");
@@ -88,5 +97,47 @@ public class tpExtensionCommand implements CommandExecutor {
         }
         //If return true, the usage of command is printed
         return false;
+    }
+
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String label, String[] args) {
+        List<String> tabList = new ArrayList<String>();
+        if (commandSender instanceof Player) {
+            Player player = (Player) commandSender;
+            if (label.equalsIgnoreCase("tpe")) {
+                int arg_len = args.length;
+                String currentString = (arg_len !=0) ? args[arg_len - 1] : "";
+                if (arg_len <= 1) {
+                    for (String subCommand: subCommandList) {
+                        if (subCommand.startsWith(currentString)) {tabList.add(subCommand);}
+                    }
+                }else if (arg_len == 2 && (args[0].equalsIgnoreCase("tp") || args[0].equalsIgnoreCase("update") || args[0].equalsIgnoreCase("remove"))){
+                    for (String tpLabel: tpLabelList) {
+                        if (tpLabel.startsWith(currentString)) {tabList.add(tpLabel);}
+                    }
+                }else if ((3<= arg_len && arg_len <= 5) && (args[0].equalsIgnoreCase("update") || args[0].equalsIgnoreCase("add")) ) {
+                    String x = Integer.toString(player.getLocation().getBlockX());
+                    String y = Integer.toString(player.getLocation().getBlockY());
+                    String z = Integer.toString(player.getLocation().getBlockZ());
+                    switch (arg_len) {
+                        case 3:
+                            tabList.add(x+" "+y+" "+z);
+                            tabList.add(x);
+                            break;
+                        case 4:
+                            tabList.add(y+" "+z);
+                            tabList.add(y);
+                            break;
+                        case 5:
+                            tabList.add(z);
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
+            }
+        }
+        return tabList;
     }
 }

@@ -1,3 +1,4 @@
   name: Sign2ChatPlugin
   main: jp.lenia23.sign2chatplugin.Sign2ChatPlugin
-  version: 1.0
+  version: 1.0.0
+  api-version: 1.14

@@ -1,12 +1,12 @@
-package jp.lenia23.tpextension;
+package jp.bismaschiruo.tpextension.tpextension.teleportextensionplugin;
 
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.World;
 
 import java.util.Set;
 
-public class tpExtension extends JavaPlugin {
+public final class TeleportExtensionPlugin extends JavaPlugin {
     public FileConfiguration config;
 
     @Override
@@ -26,7 +26,7 @@ public class tpExtension extends JavaPlugin {
         getLogger().info("TpExtensionPlugin is disabled");
     }
 
-    public void addLabel(String label, int x, int y, int z, World.Environment world) {
+    public void addLabel(String label, int x, int y, int z, String world) {
         this.config.set(label+".x", x);
         this.config.set(label+".y", y);
         this.config.set(label+".z", z);

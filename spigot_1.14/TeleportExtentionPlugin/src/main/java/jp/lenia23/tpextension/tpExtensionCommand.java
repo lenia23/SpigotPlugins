@@ -1,5 +1,6 @@
 package jp.lenia23.tpextension;
 
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -33,14 +34,17 @@ public class tpExtensionCommand implements TabExecutor {
         if (commandSender instanceof Player) {
             Player player = (Player) commandSender;
 
+            //コマンドがちゃんと"tpe"か確認
             if (label.equalsIgnoreCase("tpe")) {
                 int arg_len = args.length;
-                //subCommand: tp | add | remove | list
+                //subCommand: tp | add | remove | list | none
+                //subCommandが存在するかどうか
                 String subCommand = (arg_len == 0) ? "" : args[0];
 
                 if (subCommand.equalsIgnoreCase("tp") && arg_len == 2 ) {
                     String tplabel = args[1];
                     if (plugin.exists(tplabel)){
+
                         String x = plugin.getLabelVal(tplabel, "x");
                         String y = plugin.getLabelVal(tplabel, "y");
                         String z = plugin.getLabelVal(tplabel, "z");
@@ -52,13 +56,13 @@ public class tpExtensionCommand implements TabExecutor {
                     int x = Integer.parseInt(args[2]);
                     int y = Integer.parseInt(args[3]);
                     int z = Integer.parseInt(args[4]);
+                    World.Environment world = player.getWorld().getEnvironment();
 
                     if (plugin.exists(tplabel)){
                         player.sendRawMessage(tplabel + " already exists. If you want to update coordinates, use update subcommand.");
-                        return true;
                     } else {
-                        plugin.addLabel(tplabel, x, y, z);
-                        player.sendRawMessage(tplabel+ ": [x: " + x + ", y: " + y + ", z: " + z + "] is added");
+                        plugin.addLabel(tplabel, x, y, z, world);
+                        player.sendRawMessage(tplabel+ ": [x: " + x + ", y: " + y + ", z: " + z + " ,world:" + world + "] is added");
                         tpLabelList = plugin.getListLabels();
                         return true;
                     }
@@ -68,10 +72,10 @@ public class tpExtensionCommand implements TabExecutor {
                     int x = Integer.parseInt(args[2]);
                     int y = Integer.parseInt(args[3]);
                     int z = Integer.parseInt(args[4]);
+                    World.Environment world = player.getWorld().getEnvironment();
                     if (plugin.exists(tplabel)){
-                        plugin.addLabel(tplabel, x, y, z);
+                        plugin.addLabel(tplabel, x, y, z, world);
                         player.sendRawMessage(tplabel+ ": [x: " + x + ", y: " + y + ", z: " + z + "] is updated");
-                        return true;
                     } else {
                         player.sendRawMessage(tplabel + " does not exist. If you want to add coordinates, use add subcommand.");
                         return true;
